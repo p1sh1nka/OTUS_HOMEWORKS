@@ -6,10 +6,10 @@ namespace ShootEmUp
     {
         public bool IsPlayer
         {
-            get { return this.isPlayer; }
+            get { return this.m_isPlayer; }
         }
         
-        [SerializeField]
-        private bool isPlayer;
+        [SerializeField] 
+        private bool m_isPlayer;
     }
 }

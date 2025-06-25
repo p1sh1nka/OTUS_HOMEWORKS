@@ -5,85 +5,84 @@ namespace ShootEmUp
 {
     public sealed class BulletSystem : MonoBehaviour
     {
-        [SerializeField]
-        private int initialCount = 50;
+        [SerializeField] 
+        private int m_initialCount = 50;
         
-        [SerializeField] private Transform container;
-        [SerializeField] private Bullet prefab;
-        [SerializeField] private Transform worldTransform;
-        [SerializeField] private LevelBounds levelBounds;
+        [SerializeField] 
+        private Transform m_container;
+        
+        [SerializeField] 
+        private Bullet m_prefab;
+        
+        [SerializeField] 
+        private Transform m_worldTransform;
+        
+        [SerializeField] 
+        private LevelBounds m_levelBounds;
 
-        private readonly Queue<Bullet> m_bulletPool = new();
+        private BulletPool m_bulletPool;
         private readonly HashSet<Bullet> m_activeBullets = new();
         private readonly List<Bullet> m_cache = new();
-        
+
         private void Awake()
         {
-            InitBulletsInPool();
+            m_bulletPool = new BulletPool(m_prefab, m_container, m_initialCount);
         }
 
-        private void InitBulletsInPool()
-        {
-            for (var i = 0; i < this.initialCount; i++)
-            {
-                var bullet = Instantiate(this.prefab, this.container);
-                this.m_bulletPool.Enqueue(bullet);
-            }
-        }
-        
         private void FixedUpdate()
         {
-            this.m_cache.Clear();
-            this.m_cache.AddRange(this.m_activeBullets);
-
-            CheckForBounds();
+            m_cache.Clear();
+            m_cache.AddRange(m_activeBullets);
+            
+            CheckOutOfBoundsBullets();
         }
 
-        private void CheckForBounds()
+        private void CheckOutOfBoundsBullets()
         {
-            for (int i = 0, count = this.m_cache.Count; i < count; i++)
+            foreach (var bullet in m_cache)
             {
-                var bullet = this.m_cache[i];
-                if (!this.levelBounds.InBounds(bullet.transform.position))
+                if (!m_levelBounds.InBounds(bullet.transform.position))
                 {
-                    this.RemoveBullet(bullet);
+                    TryRemoveBullet(bullet);
                 }
             }
         }
 
         public void FlyBulletByArgs(BulletArgs bulletArgs)
         {
-            if (this.m_bulletPool.TryDequeue(out var bullet))
+            if (!m_bulletPool.TryGetBullet(out var bullet))
             {
-                bullet.transform.SetParent(this.worldTransform);
-            }
-            else
-            {
-                bullet = Instantiate(this.prefab, this.worldTransform);
+                return;
             }
 
-            bullet = BulletBuilder.BuildBullet(bullet, bulletArgs);
+            bullet.transform.SetParent(m_worldTransform);
             
-            if (this.m_activeBullets.Add(bullet))
+            bullet = BulletBuilder.BuildBullet(bullet, bulletArgs);
+
+            if (m_activeBullets.Add(bullet))
             {
-                bullet.OnCollisionEntered += this.OnBulletCollision;
+                bullet.OnCollisionEntered += OnBulletCollision;
             }
         }
-        
+
         private void OnBulletCollision(Bullet bullet, Collision2D collision)
         {
             BulletUtils.DealDamage(bullet, collision.gameObject);
-            this.RemoveBullet(bullet);
+            TryRemoveBullet(bullet);
         }
 
-        private void RemoveBullet(Bullet bullet)
+        private bool TryRemoveBullet(Bullet bullet)
         {
-            if (this.m_activeBullets.Remove(bullet))
+            if (!m_activeBullets.Remove(bullet))
             {
-                bullet.OnCollisionEntered -= this.OnBulletCollision;
-                bullet.transform.SetParent(this.container);
-                this.m_bulletPool.Enqueue(bullet);
+                return false;
             }
+
+            bullet.OnCollisionEntered -= OnBulletCollision;
+            
+            m_bulletPool.ReturnBullet(bullet);
+            
+            return true;
         }
     }
 }

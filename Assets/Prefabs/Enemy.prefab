@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52112fd3e5414bf991b1d54804cb28f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 0
+  m_isPlayer: 0
 --- !u!114 &5568771391735819372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce88fee201654f6e8064002ed15de594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 659620479434099170}
+  m_rigidbody2D: {fileID: 659620479434099170}
   speed: 7
 --- !u!114 &5568771391735819374
 MonoBehaviour:
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce164c84a74a425f8d2e82764aef9e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePoint: {fileID: 3195880656587174614}
+  m_firePoint: {fileID: 3195880656587174614}
 --- !u!114 &8186052948131603766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bdb5771141e4cf18c434a69ec116e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveComponent: {fileID: 5568771391735819372}
+  m_moveComponent: {fileID: 5568771391735819372}
 --- !u!114 &6896809305229427933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,9 +220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba7965842e74a9f89ba3aa66d61da46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponComponent: {fileID: 5568771391735819374}
-  moveAgent: {fileID: 8186052948131603766}
-  countdown: 1
+  m_weaponComponent: {fileID: 5568771391735819374}
+  m_moveAgent: {fileID: 8186052948131603766}
+  m_countdown: 1
 --- !u!114 &8702928675647125994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8a253eb7db4f2d89d899df61076fbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 1
+  m_hitPoints: 1
 --- !u!1 &2239154907127902911
 GameObject:
   m_ObjectHideFlags: 0

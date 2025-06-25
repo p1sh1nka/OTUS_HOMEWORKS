@@ -1,39 +1,42 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ShootEmUp
 {
     public class CharacterWeaponController : MonoBehaviour
     {
-        [SerializeField] private BulletSystem _bulletSystem;
-        [SerializeField] private BulletConfig _bulletConfig;
-        [SerializeField] private GameObject character;
-        [SerializeField] private PlayerInputManager inputManager;
-         
-        private WeaponComponent _weaponComponent;
+        [SerializeField] 
+        private BulletSystem m_bulletSystem;
+        
+        [SerializeField] 
+        private BulletConfig m_bulletConfig;
+        
+        [SerializeField] 
+        private WeaponComponent m_characterWeaponComponent;
+        
+        [SerializeField] 
+        private PlayerInputManager m_inputManager;
 
         private void Start()
         {
-            _weaponComponent = character.GetComponent<WeaponComponent>();
-            inputManager.OnSpacePressed += OnFlyBullet;
+            m_inputManager.OnSpacePressed += OnFlyBullet;
         }
         
         private void OnFlyBullet()
         {
             BulletArgs bulletArgs = FormBulletArgs();
-            _bulletSystem.FlyBulletByArgs(bulletArgs);
+            m_bulletSystem.FlyBulletByArgs(bulletArgs);
         }
 
         private BulletArgs FormBulletArgs()
         {
             return new BulletArgs
             {
-                isPlayer = true,
-                physicsLayer = (int)this._bulletConfig.physicsLayer,
-                color = this._bulletConfig.color,
-                damage = this._bulletConfig.damage,
-                position = _weaponComponent.Position,
-                velocity = _weaponComponent.Rotation * Vector3.up * this._bulletConfig.speed
+                IsPlayer = true,
+                PhysicsLayer = (int)this.m_bulletConfig.PhysicsLayer,
+                Color = this.m_bulletConfig.Color,
+                Damage = this.m_bulletConfig.Damage,
+                Position = m_characterWeaponComponent.Position,
+                Velocity = m_characterWeaponComponent.Rotation * Vector3.up * this.m_bulletConfig.Speed
             };
         }
     }

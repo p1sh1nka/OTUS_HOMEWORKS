@@ -1,31 +1,46 @@
-using System;
 using UnityEngine;
 
 namespace ShootEmUp
 {
     public sealed class CharacterController : MonoBehaviour
     {
-        [SerializeField] private GameObject character;
-        [SerializeField] private PlayerInputManager inputManager;
-        
-        private MoveComponent moveComponent;
-        
+        [SerializeField] 
+        private GameObject m_character;
+    
+        [SerializeField] 
+        private PlayerInputManager m_inputManager;
+
+        private MoveComponent m_moveComponent;
+        private PlayerHitPointsComponent m_hitPointsComponent;
+
         private void OnEnable()
         {
-            this.character.GetComponent<PlayerHitPointsComponent>().hpEmpty += this.OnCharacterDeath;
+            if (m_character.TryGetComponent(out m_hitPointsComponent))
+            {
+                m_hitPointsComponent.OnHitPointsEmpty += OnCharacterDeath;
+            }
         }
 
         private void Start()
         {
-            moveComponent = character.GetComponent<MoveComponent>();
+            if (!m_character.TryGetComponent(out m_moveComponent))
+            {
+                Debug.LogError("MoveComponent not found on character.");
+            }
         }
 
         private void OnDisable()
         {
-            this.character.GetComponent<PlayerHitPointsComponent>().hpEmpty -= this.OnCharacterDeath;
+            if (m_hitPointsComponent != null)
+            {
+                m_hitPointsComponent.OnHitPointsEmpty -= OnCharacterDeath;
+            }
         }
 
-        private void OnCharacterDeath() => GameFinishHandler.FinishGame();
+        private void OnCharacterDeath()
+        {
+            GameFinishHandler.FinishGame();
+        }
 
         private void FixedUpdate()
         {
@@ -34,10 +49,9 @@ namespace ShootEmUp
 
         private void MovePlayer()
         {
-            float horizontalInput = inputManager.GetHorizontalDirection();
-            moveComponent.MoveByRigidbodyVelocity(new Vector2(horizontalInput, 0) * Time.fixedDeltaTime);
+            float horizontalInput = m_inputManager.GetHorizontalDirection();
+            m_moveComponent.MoveByRigidbodyVelocity(new Vector2(horizontalInput, 0) * Time.fixedDeltaTime);
         }
-
        
     }
 }

@@ -1,14 +1,13 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace ShootEmUp
 {
     public sealed class PlayerInputManager : MonoBehaviour
     {
-        private float horizontalDirection;
+        private float m_horizontalDirection;
 
-        public Action OnSpacePressed;
+        public event Action OnSpacePressed;
         
         private void Update()
         {
@@ -19,18 +18,18 @@ namespace ShootEmUp
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                this.horizontalDirection = -1;
+                this.m_horizontalDirection = -1;
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                this.horizontalDirection = 1;
+                this.m_horizontalDirection = 1;
             }
             else
             {
-                this.horizontalDirection = 0;
+                this.m_horizontalDirection = 0;
             }
         }
         
-        public float GetHorizontalDirection() => this.horizontalDirection;
+        public float GetHorizontalDirection() => this.m_horizontalDirection;
     }
 }

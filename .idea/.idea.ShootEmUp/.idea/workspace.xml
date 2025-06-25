@@ -10,6 +10,9 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="SWEA" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -73,6 +76,13 @@
       <workItem from="1750444432983" duration="6641000" />
       <workItem from="1750686209643" duration="6000" />
       <workItem from="1750686220784" duration="8063000" />
+      <workItem from="1750717216814" duration="1586000" />
+      <workItem from="1750764869155" duration="4351000" />
+      <workItem from="1750788433560" duration="189000" />
+      <workItem from="1750796940193" duration="2150000" />
+      <workItem from="1750806034625" duration="8381000" />
+      <workItem from="1750814611535" duration="5000" />
+      <workItem from="1750814624906" duration="159000" />
     </task>
     <servers />
   </component>

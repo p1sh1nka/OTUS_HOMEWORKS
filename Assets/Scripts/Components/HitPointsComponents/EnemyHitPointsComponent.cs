@@ -5,11 +5,11 @@ namespace ShootEmUp
 {
     public class EnemyHitPointsComponent : HitPointsComponent
     {
-        public Action<GameObject> hpEmpty;
+        public event Action<GameObject> OnHitPointsEmpty;
         
         public override void OnHpEmpty()
         {
-            this.hpEmpty?.Invoke(this.gameObject);
+            this.OnHitPointsEmpty?.Invoke(this.gameObject);
         }
     }
 }

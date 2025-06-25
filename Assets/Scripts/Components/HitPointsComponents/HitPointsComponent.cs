@@ -1,21 +1,21 @@
-using System;
 using UnityEngine;
 
 namespace ShootEmUp
 {
     public abstract class HitPointsComponent : MonoBehaviour
     {
-        [SerializeField] private int hitPoints;
+        [SerializeField] private int m_hitPoints;
         
-        public bool IsHitPointsExists() {
-            return this.hitPoints > 0;
+        public bool IsHitPointsExists() 
+        {
+            return this.m_hitPoints > 0;
         }
 
         public void TakeDamage(int damage)
         {
-            this.hitPoints -= damage;
+            this.m_hitPoints -= damage;
             
-            if (this.hitPoints <= 0)
+            if (this.m_hitPoints <= 0)
             {
                 OnHpEmpty();
             }
