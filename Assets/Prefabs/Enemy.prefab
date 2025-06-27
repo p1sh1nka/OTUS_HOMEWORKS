@@ -210,7 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_moveComponent: {fileID: 5568771391735819372}
   m_destination: {x: 0, y: 0}
-  m_isReached: 0
+  m_isReached: 1
 --- !u!114 &6896809305229427933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_weaponComponent: {fileID: 5568771391735819374}
   m_moveAgent: {fileID: 8186052948131603766}
   m_countdown: 1
-  m_target: {fileID: 2370451972767177707}
+  m_target: {fileID: 0}
 --- !u!114 &8702928675647125994
 MonoBehaviour:
   m_ObjectHideFlags: 0

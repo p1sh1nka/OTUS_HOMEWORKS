@@ -14,7 +14,7 @@ namespace GameCycleLogic
         
         private void Awake()
         {
-            m_monoBehaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
+            m_monoBehaviours = FindObjectsOfType<MonoBehaviour>();
 
             foreach (var monoBehaviour in m_monoBehaviours)
             {

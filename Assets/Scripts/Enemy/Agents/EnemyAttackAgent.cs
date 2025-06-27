@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace ShootEmUp
 {
@@ -41,7 +43,7 @@ namespace ShootEmUp
             
             if (this.m_target.TryGetComponent(out HitPointsComponent hitPoints))
             {
-                if (hitPoints.IsHitPointsExists())
+                if (!hitPoints.IsHitPointsExists())
                 {
                     return;
                 }
