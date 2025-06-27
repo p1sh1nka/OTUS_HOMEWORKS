@@ -1,8 +1,11 @@
+using System;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyMoveAgent : MonoBehaviour
+    public sealed class EnemyMoveAgent : 
+        MonoBehaviour, IFixedUpdatable
     {
         public bool IsReached
         {
@@ -12,9 +15,9 @@ namespace ShootEmUp
         [SerializeField] 
         private MoveComponent m_moveComponent;
 
-        private Vector2 m_destination;
+        public Vector2 m_destination;
 
-        private bool m_isReached;
+        public bool m_isReached;
 
         public void SetDestination(Vector2 endPoint)
         {
@@ -22,7 +25,7 @@ namespace ShootEmUp
             this.m_isReached = false;
         }
 
-        private void FixedUpdate()
+        void IFixedUpdatable.OnFixedUpdate(float fixedDeltaTime)
         {
             if (this.m_isReached)
             {
@@ -36,7 +39,7 @@ namespace ShootEmUp
                 return;
             }
 
-            var direction = vector.normalized * Time.fixedDeltaTime;
+            var direction = vector.normalized * fixedDeltaTime;
             this.m_moveComponent.MoveByRigidbodyVelocity(direction);
         }
     }

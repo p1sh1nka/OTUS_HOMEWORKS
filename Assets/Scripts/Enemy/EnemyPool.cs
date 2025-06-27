@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyPool : MonoBehaviour
+    public sealed class EnemyPool : 
+        MonoBehaviour, 
+        IInitializable
     {
         [Header("Spawn")]
         [SerializeField]
@@ -21,11 +24,15 @@ namespace ShootEmUp
 
         [SerializeField]
         private GameObject m_prefab;
+        
+        [SerializeField]
+        private GameObjectEventsHandler m_eventsHandler;
 
         private readonly Queue<GameObject> enemyPool = new();
 
         private int m_initialEnemy = 7;
-        private void Awake()
+        
+        void IInitializable.OnInitGame()
         {
             for (var i = 0; i < m_initialEnemy; i++)
             {
@@ -40,13 +47,14 @@ namespace ShootEmUp
             {
                 return false;
             }
-
+            
             enemy.transform.SetParent(this.m_worldTransform);
 
             var spawnPosition = this.m_enemyPositions.RandomSpawnPosition();
             enemy.transform.position = spawnPosition.position;
             
-            var attackPosition = this.m_enemyPositions.RandomAttackPosition();
+            var attackPosition = this.m_enemyPositions.RandomAttackPosition(); 
+            
             if (enemy.TryGetComponent(out EnemyMoveAgent moveAgent))
             {
                 moveAgent.SetDestination(attackPosition.position);
@@ -57,6 +65,8 @@ namespace ShootEmUp
                 attackAgent.SetTarget(this.m_character);
             }
             
+            m_eventsHandler.SubscribeAllEvents(enemy.gameObject);
+            
             return enemy;
         }
 
@@ -64,6 +74,8 @@ namespace ShootEmUp
         {
             enemy.transform.SetParent(this.m_container);
             this.enemyPool.Enqueue(enemy);
+            
+            m_eventsHandler.UnsubscribeAllEvents(enemy);
         }
     }
 }

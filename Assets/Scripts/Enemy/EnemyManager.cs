@@ -1,10 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyManager : MonoBehaviour
+    public sealed class EnemyManager : 
+        MonoBehaviour,
+        IStartable,
+        IPausable,
+        IResumable
     {
         [SerializeField]
         private EnemyPool m_enemyPool;
@@ -15,11 +21,29 @@ namespace ShootEmUp
         [SerializeField]
         private BulletConfig m_bulletConfig;
         
+        [SerializeField]
+        private GameObjectEventsHandler m_gameObjectEventsHandler;
+        
         private readonly HashSet<GameObject> m_activeEnemies = new();
 
         private float m_enemySpawnDelayTime = 1f;
+
+       void IStartable.OnGameStart()
+       {
+           StartCoroutine(OnStart());
+       }
         
-        private IEnumerator Start()
+       public void OnGamePause()
+       {
+           StopCoroutine(OnStart());
+       }
+
+       public void OnGameResume()
+       {
+           StartCoroutine(OnStart());
+       }
+       
+        private IEnumerator OnStart()
         {
             while (true)
             {
@@ -38,6 +62,8 @@ namespace ShootEmUp
                         {
                             attackAgent.OnFire += OnFire;
                         }
+                        
+                        m_gameObjectEventsHandler.SubscribeAllEvents(enemy);
                     }    
                 }
             }
@@ -66,8 +92,8 @@ namespace ShootEmUp
             m_bulletSystem.FlyBulletByArgs(new BulletArgs
             {
                 IsPlayer = false,
-                PhysicsLayer = (int) m_bulletConfig.PhysicsLayer,
-                Color =m_bulletConfig.Color,
+                PhysicsLayer = (int)m_bulletConfig.PhysicsLayer,
+                Color = m_bulletConfig.Color,
                 Damage = m_bulletConfig.Damage,
                 Position = position,
                 Velocity = direction * m_bulletConfig.Speed,

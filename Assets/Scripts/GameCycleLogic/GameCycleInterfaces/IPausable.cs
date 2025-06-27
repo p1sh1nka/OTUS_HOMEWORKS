@@ -1,6 +1,6 @@
 ﻿namespace GameCycleLogic.GameCycleInterfaces
 {
-    public interface IGamePauseListener : IGameStateListener
+    public interface IPausable : IGameStateListener
     {
         void OnGamePause();
     }

@@ -1,9 +1,13 @@
+﻿using UnityEngine;
 using System;
-using UnityEngine;
+using GameCycleLogic.GameCycleInterfaces;
 
 namespace ShootEmUp
 {
-    public sealed class Bullet : MonoBehaviour
+    public sealed class Bullet : 
+        MonoBehaviour,
+        IPausable,
+        IResumable
     {
         public event Action<Bullet, Collision2D> OnCollisionEntered;
 
@@ -18,6 +22,8 @@ namespace ShootEmUp
         
         [SerializeField] 
         private SpriteRenderer m_spriteRenderer;
+        
+        private Vector2 m_activeVelocity;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
@@ -27,6 +33,7 @@ namespace ShootEmUp
         public void SetVelocity(Vector2 velocity)
         {
             this.m_rigidbody2D.velocity = velocity;
+            m_activeVelocity = velocity;
         }
 
         public void SetPhysicsLayer(int physicsLayer)
@@ -42,6 +49,17 @@ namespace ShootEmUp
         public void SetColor(Color color)
         {
             this.m_spriteRenderer.color = color;
+        }
+
+        [ContextMenu("Pause")]
+        public void OnGamePause()
+        {
+            this.m_rigidbody2D.velocity = Vector2.zero;
+        }
+
+        public void OnGameResume()
+        {
+            this.m_rigidbody2D.velocity = m_activeVelocity;
         }
     }
 }

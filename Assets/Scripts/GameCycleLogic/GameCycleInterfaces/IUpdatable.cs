@@ -1,6 +1,6 @@
 ﻿namespace GameCycleLogic.GameCycleInterfaces
 {
-    public interface IGameUpdateListener : IGameStateListener
+    public interface IUpdatable : IGameStateListener
     {
         void OnUpdate(float deltaTime);
     }

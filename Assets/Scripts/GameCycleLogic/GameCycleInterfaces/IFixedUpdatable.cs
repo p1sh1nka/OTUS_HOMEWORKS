@@ -1,6 +1,6 @@
 ﻿namespace GameCycleLogic.GameCycleInterfaces
 {
-    public interface IGameFixedUpdateListener : IGameStateListener
+    public interface IFixedUpdatable : IGameStateListener
     {
         void OnFixedUpdate(float fixedDeltaTime);
     }

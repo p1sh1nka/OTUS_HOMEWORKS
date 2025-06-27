@@ -36,6 +36,8 @@ namespace ShootEmUp
 
             bullet = Object.Instantiate(m_prefab, m_container);
             
+            
+            
             return bullet != null;
         }
 

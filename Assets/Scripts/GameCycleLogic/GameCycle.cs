@@ -2,74 +2,142 @@
 using UnityEngine;
 using System.Collections.Generic;
 using GameCycleLogic.GameCycleInterfaces;
+using ShootEmUp;
 
 namespace GameCycleLogic
 {
     public class GameCycle : MonoBehaviour
     {
-        private List<IGameStateListener> _listeners = new List<IGameStateListener>();
+        private List<IGameStateListener> m_listeners = new List<IGameStateListener>();
         
-        private List<IGameUpdateListener> _gameUpdateListeners = new List<IGameUpdateListener>();
-        private List<IGameFixedUpdateListener> _gameFixedUpdateListeners = new List<IGameFixedUpdateListener>();
+        private List<IUpdatable> m_gameUpdateListeners = new List<IUpdatable>();
+        private List<IFixedUpdatable> m_gameFixedUpdateListeners = new List<IFixedUpdatable>();
 
-        private GameState _gameState = GameState.OFF;
+        private GameState m_gameState = GameState.OFF;
 
         public void AddListener(IGameStateListener listener)
         {
-            if(listener is IGameUpdateListener)
-                _gameUpdateListeners.Add(listener as IGameUpdateListener);
-            else if(listener is IGameFixedUpdateListener)
-                _gameFixedUpdateListeners.Add(listener as IGameFixedUpdateListener);
-            else
-                _listeners.Add(listener as IGameStateListener);
+            m_listeners.Add(listener as IGameStateListener);
+            
+            if (listener is IUpdatable)
+            {
+                m_gameUpdateListeners.Add(listener as IUpdatable);
+            }
+            if (listener is IFixedUpdatable)
+            {
+                m_gameFixedUpdateListeners.Add(listener as IFixedUpdatable);
+            }
+        }
+
+        public void RemoveListener(IGameStateListener listener)
+        {
+            m_listeners.Remove(listener as IGameStateListener);
+            
+            if (listener is IUpdatable)
+            {
+                m_gameUpdateListeners.Remove(listener as IUpdatable);
+            }
+            if (listener is IFixedUpdatable)
+            {
+                m_gameFixedUpdateListeners.Remove(listener as IFixedUpdatable);
+            }
+        }
+
+        /*private void Awake()
+        {
+            // some logic
+            
+            OnInit();
+        }*/
+
+        public void OnInit()
+        {
+            foreach (var gameStateListener in m_listeners)
+            {
+                if (gameStateListener is IInitializable gameInitListener)
+                {
+                    gameInitListener.OnInitGame();
+                }
+            }
+
+            m_gameState = GameState.INITIALIZED;
+        }
+        public void OnStart()
+        {
+           /* if(m_gameState != GameState.INITIALIZED)
+                return;*/
+
+            for (var index = 0; index < m_listeners.Count; index++)
+            {
+                var gameStateListener = m_listeners[index];
+                if (gameStateListener is IStartable gameStartListener)
+                {
+                    gameStartListener.OnGameStart();
+                }
+            }
+
+            m_gameState = GameState.PLAYING;
+        }
+
+        public void OnPause()
+        {
+            m_gameState = GameState.PAUSED;
+            
+            for (var index = 0; index < m_listeners.Count; index++)
+            {
+                var gameStateListener = m_listeners[index];
+                if (gameStateListener is IPausable gamePauseListener)
+                {
+                    gamePauseListener.OnGamePause();
+                }
+            }
         }
         
-        private void Awake()
+        public void OnResume()
         {
-            
-        }
-
-        void Start()
-        {
-            if(_gameState != GameState.OFF)
-                return;
-            
-            foreach (IGameStateListener gameStateListener in _listeners)
+            for (var index = 0; index < m_listeners.Count; index++)
             {
-                if(gameStateListener is IGameStartListener)
-                    ((IGameStartListener)gameStateListener).OnGameStart();
+                var gameStateListener = m_listeners[index];
+                if (gameStateListener is IResumable gameResumeListener)
+                {
+                    gameResumeListener.OnGameResume();
+                }
             }
             
-            _gameState = GameState.PLAYING;
+            m_gameState = GameState.PLAYING;
         }
 
-        public void OnUpdate()
+        private void Update()
         {
-            if (_gameState != GameState.PLAYING)
+            if (m_gameState != GameState.PLAYING)
                 return;
             
             float deltaTime = Time.deltaTime;
-            
-            foreach (IGameStateListener gameStateListener in _listeners)
+
+            for (var index = 0; index < m_gameUpdateListeners.Count; index++)
             {
-                
-                if(gameStateListener is IGameUpdateListener)
-                    ((IGameUpdateListener)gameStateListener).OnUpdate(deltaTime);
+                var gameStateListener = m_gameUpdateListeners[index];
+                if (gameStateListener is IUpdatable gameUpdateListener)
+                {
+                    gameUpdateListener.OnUpdate(deltaTime);
+                }
             }
         }
 
-        public void OnFixedUpdate()
+        private void FixedUpdate()
         {
-            if (_gameState != GameState.PLAYING)
+            if (m_gameState != GameState.PLAYING)
                 return;
             
             float fixedDeltaTime = Time.fixedDeltaTime;
-            
-            foreach (IGameStateListener gameStateListener in _listeners)
+
+            for (var index = 0; index < m_gameFixedUpdateListeners.Count; index++)
             {
-                
-                if(gameStateListener is IGameFixedUpdateListener)
-                    ((IGameFixedUpdateListener)gameStateListener).OnFixedUpdate(fixedDeltaTime);
+                var gameStateListener = m_gameFixedUpdateListeners[index];
+                if (gameStateListener is IFixedUpdatable gameFixedUpdateListener)
+                {
+                    gameFixedUpdateListener.OnFixedUpdate(fixedDeltaTime);
+                }
             }
         }
     }

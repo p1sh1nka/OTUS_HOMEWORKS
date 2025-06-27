@@ -1,9 +1,12 @@
 using System;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class EnemyAttackAgent : MonoBehaviour
+    public sealed class EnemyAttackAgent : 
+        MonoBehaviour,
+        IFixedUpdatable
     {
         public event Action<GameObject,Vector2,Vector2> OnFire;
 
@@ -15,8 +18,8 @@ namespace ShootEmUp
         
         [SerializeField] 
         private float m_countdown;
-
-        private GameObject m_target;
+        
+        public GameObject m_target;
         private float m_currentTime;
 
         public void SetTarget(GameObject target)
@@ -29,27 +32,22 @@ namespace ShootEmUp
             this.m_currentTime = this.m_countdown;
         }
 
-        private void FixedUpdate()
+        void IFixedUpdatable.OnFixedUpdate(float deltaTime)
         {
             if (!this.m_moveAgent.IsReached)
             {
                 return;
             }
             
-            if (!this.m_target.GetComponent<HitPointsComponent>().IsHitPointsExists())
+            if (this.m_target.TryGetComponent(out HitPointsComponent hitPoints))
             {
-                return;
-            }
-            
-            if (!this.m_target.TryGetComponent(out HitPointsComponent hitPoints))
-            {
-                if (!hitPoints.IsHitPointsExists())
+                if (hitPoints.IsHitPointsExists())
                 {
                     return;
                 }
             }
 
-            this.m_currentTime -= Time.fixedDeltaTime;
+            this.m_currentTime -= deltaTime;
             
             if (this.m_currentTime <= 0)
             {

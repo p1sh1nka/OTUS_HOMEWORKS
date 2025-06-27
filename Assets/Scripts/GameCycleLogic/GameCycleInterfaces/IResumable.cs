@@ -1,6 +1,6 @@
 ﻿namespace GameCycleLogic.GameCycleInterfaces
 {
-    public interface IGameResumeListener : IGameStateListener
+    public interface IResumable : IGameStateListener
     {
         void OnGameResume();
     }

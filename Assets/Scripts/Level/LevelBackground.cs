@@ -1,9 +1,10 @@
 using System;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class LevelBackground : MonoBehaviour
+    public sealed class LevelBackground : MonoBehaviour,IInitializable,IFixedUpdatable
     {
         private float m_startPositionY;
 
@@ -20,7 +21,7 @@ namespace ShootEmUp
         [SerializeField]
         private Params m_params;
 
-        private void Awake()
+        void IInitializable.OnInitGame()
         {
             this.m_startPositionY = this.m_params.StartPositionY;
             this.m_endPositionY = this.m_params.EndPositionY;
@@ -31,7 +32,7 @@ namespace ShootEmUp
             this.m_positionZ = position.z;
         }
 
-        private void FixedUpdate()
+        void IFixedUpdatable.OnFixedUpdate(float fixedDeltaTime)
         {
             if (this.m_myTransform.position.y <= this.m_endPositionY)
             {
@@ -44,7 +45,7 @@ namespace ShootEmUp
 
             this.m_myTransform.position -= new Vector3(
                 this.m_positionX,
-                this.m_movingSpeedY * Time.fixedDeltaTime,
+                this.m_movingSpeedY * fixedDeltaTime,
                 this.m_positionZ
             );
         }

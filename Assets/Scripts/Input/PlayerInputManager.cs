@@ -1,15 +1,18 @@
 using System;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class PlayerInputManager : MonoBehaviour
+    public sealed class PlayerInputManager : 
+        MonoBehaviour, 
+        IUpdatable
     {
         private float m_horizontalDirection;
 
         public event Action OnSpacePressed;
         
-        private void Update()
+        void IUpdatable.OnUpdate(float deltaTime)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {

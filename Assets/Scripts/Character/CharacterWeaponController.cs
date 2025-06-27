@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using GameCycleLogic.GameCycleInterfaces;
+using UnityEngine;
 
 namespace ShootEmUp
 {
-    public class CharacterWeaponController : MonoBehaviour
+    public class CharacterWeaponController : MonoBehaviour, IStartable
     {
         [SerializeField] 
         private BulletSystem m_bulletSystem;
@@ -16,7 +17,7 @@ namespace ShootEmUp
         [SerializeField] 
         private PlayerInputManager m_inputManager;
 
-        private void Start()
+        void IStartable.OnGameStart()
         {
             m_inputManager.OnSpacePressed += OnFlyBullet;
         }

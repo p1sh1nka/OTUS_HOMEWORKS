@@ -1,6 +1,6 @@
 ﻿namespace GameCycleLogic.GameCycleInterfaces
 {
-    public interface IGameStartListener : IGameStateListener
+    public interface IStartable : IGameStateListener
     {
         void OnGameStart();
     }

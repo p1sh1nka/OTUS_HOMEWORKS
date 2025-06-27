@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
 namespace ShootEmUp
 {
-    public sealed class BulletSystem : MonoBehaviour
+    public sealed class BulletSystem : 
+        MonoBehaviour, 
+        IInitializable, 
+        IFixedUpdatable
     {
         [SerializeField] 
         private int m_initialCount = 50;
@@ -19,17 +23,20 @@ namespace ShootEmUp
         
         [SerializeField] 
         private LevelBounds m_levelBounds;
+        
+        [SerializeField]
+        private GameObjectEventsHandler m_eventsHandler;
 
         private BulletPool m_bulletPool;
         private readonly HashSet<Bullet> m_activeBullets = new();
         private readonly List<Bullet> m_cache = new();
 
-        private void Awake()
+        void IInitializable.OnInitGame()
         {
             m_bulletPool = new BulletPool(m_prefab, m_container, m_initialCount);
         }
 
-        private void FixedUpdate()
+        void IFixedUpdatable.OnFixedUpdate(float fixedDeltaTime)
         {
             m_cache.Clear();
             m_cache.AddRange(m_activeBullets);
@@ -54,6 +61,8 @@ namespace ShootEmUp
             {
                 return;
             }
+
+            m_eventsHandler.SubscribeAllEvents(bullet.gameObject);
 
             bullet.transform.SetParent(m_worldTransform);
             
@@ -81,7 +90,7 @@ namespace ShootEmUp
             bullet.OnCollisionEntered -= OnBulletCollision;
             
             m_bulletPool.ReturnBullet(bullet);
-            
+            m_eventsHandler.UnsubscribeAllEvents(bullet.gameObject);
             return true;
         }
     }

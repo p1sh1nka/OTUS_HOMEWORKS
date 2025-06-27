@@ -1,6 +1,6 @@
 ﻿namespace GameCycleLogic.GameCycleInterfaces
 {
-    public interface IGameFinishListener : IGameStateListener
+    public interface IFinishable : IGameStateListener
     {
         void OnGameFinish();
     }
