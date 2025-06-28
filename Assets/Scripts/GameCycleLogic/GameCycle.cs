@@ -43,6 +43,28 @@ namespace GameCycleLogic
             }
         }
 
+        public void AddListenersOfGameObject(GameObject gameObject)
+        {
+            foreach (var listener in gameObject.GetComponents<MonoBehaviour>())
+            {
+                if (listener is IGameStateListener gameStateListener)
+                {
+                    this.AddListener(gameStateListener);
+                }
+            }
+        }
+
+        public void RemoveListenersOfGameObject(GameObject gameObject)
+        {
+            foreach (var listener in gameObject.GetComponents<MonoBehaviour>())
+            {
+                if (listener is IGameStateListener gameStateListener)
+                {
+                    this.RemoveListener(gameStateListener);
+                }
+            }
+        }
+
         /*private void Awake()
         {
             // some logic
@@ -139,6 +161,20 @@ namespace GameCycleLogic
                     gameFixedUpdateListener.OnFixedUpdate(fixedDeltaTime);
                 }
             }
+        }
+
+        public void OnFinish()
+        {
+            for (var index = 0; index < m_listeners.Count; index++)
+            {
+                var gameStateListener = m_listeners[index];
+                if (gameStateListener is IFinishable gameFinishListener)
+                {
+                    gameFinishListener.OnGameFinish();
+                }
+            }
+
+            m_gameState = GameState.FINISHED;
         }
     }
 }

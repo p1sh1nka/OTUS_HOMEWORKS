@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameCycleLogic;
 using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
@@ -10,7 +12,8 @@ namespace ShootEmUp
         MonoBehaviour,
         IStartable,
         IPausable,
-        IResumable
+        IResumable,
+        IFinishable
     {
         [SerializeField]
         private EnemyPool m_enemyPool;
@@ -22,7 +25,7 @@ namespace ShootEmUp
         private BulletConfig m_bulletConfig;
         
         [SerializeField]
-        private GameObjectEventsHandler m_gameObjectEventsHandler;
+        private GameCycle m_gameCycle;
         
         private readonly HashSet<GameObject> m_activeEnemies = new();
 
@@ -63,7 +66,7 @@ namespace ShootEmUp
                             attackAgent.OnFire += OnFire;
                         }
                         
-                        m_gameObjectEventsHandler.SubscribeAllEvents(enemy);
+                        m_gameCycle.AddListenersOfGameObject(enemy);
                     }    
                 }
             }
@@ -98,6 +101,11 @@ namespace ShootEmUp
                 Position = position,
                 Velocity = direction * m_bulletConfig.Speed,
             });
+        }
+
+        public void OnGameFinish()
+        {
+            StopCoroutine(OnStart());
         }
     }
 }

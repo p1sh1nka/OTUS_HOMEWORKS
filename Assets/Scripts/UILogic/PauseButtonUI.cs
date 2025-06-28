@@ -10,13 +10,15 @@ namespace UILogic
         [SerializeField] 
         private GameCycle m_gameCycle;
         
-        private Button m_button;
-        public void OnInitGame()
+        private Button m_button; 
+        void IInitializable.OnInitGame()
         {
             if (this.TryGetComponent(out Button m_button))
             {
                 m_button.onClick.AddListener(m_gameCycle.OnPause);
             }
+            
+           // m_gameCycle.AddListenersOfGameObject(this.gameObject);
         }
     }
 }

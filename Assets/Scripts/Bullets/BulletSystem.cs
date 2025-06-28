@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using GameCycleLogic;
 using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
@@ -24,8 +26,8 @@ namespace ShootEmUp
         [SerializeField] 
         private LevelBounds m_levelBounds;
         
-        [SerializeField]
-        private GameObjectEventsHandler m_eventsHandler;
+        [FormerlySerializedAs("m_eventsHandler")] [SerializeField]
+        private GameCycle m_gameCycle;
 
         private BulletPool m_bulletPool;
         private readonly HashSet<Bullet> m_activeBullets = new();
@@ -62,7 +64,7 @@ namespace ShootEmUp
                 return;
             }
 
-            m_eventsHandler.SubscribeAllEvents(bullet.gameObject);
+            m_gameCycle.AddListenersOfGameObject(bullet.gameObject);
 
             bullet.transform.SetParent(m_worldTransform);
             
@@ -90,7 +92,8 @@ namespace ShootEmUp
             bullet.OnCollisionEntered -= OnBulletCollision;
             
             m_bulletPool.ReturnBullet(bullet);
-            m_eventsHandler.UnsubscribeAllEvents(bullet.gameObject);
+            m_gameCycle.RemoveListenersOfGameObject(bullet.gameObject);
+            
             return true;
         }
     }

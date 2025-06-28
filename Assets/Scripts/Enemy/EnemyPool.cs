@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using GameCycleLogic;
 using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ShootEmUp
 {
@@ -26,7 +28,7 @@ namespace ShootEmUp
         private GameObject m_prefab;
         
         [SerializeField]
-        private GameObjectEventsHandler m_eventsHandler;
+        private GameCycle m_gameCycle;
 
         private readonly Queue<GameObject> enemyPool = new();
 
@@ -65,7 +67,7 @@ namespace ShootEmUp
                 attackAgent.SetTarget(this.m_character);
             }
             
-            m_eventsHandler.SubscribeAllEvents(enemy.gameObject);
+            m_gameCycle.AddListenersOfGameObject(enemy.gameObject);
             
             return enemy;
         }
@@ -75,7 +77,7 @@ namespace ShootEmUp
             enemy.transform.SetParent(this.m_container);
             this.enemyPool.Enqueue(enemy);
             
-            m_eventsHandler.UnsubscribeAllEvents(enemy);
+            m_gameCycle.AddListenersOfGameObject(enemy);
         }
     }
 }

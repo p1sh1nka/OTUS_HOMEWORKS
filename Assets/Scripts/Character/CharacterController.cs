@@ -1,3 +1,4 @@
+using GameCycleLogic;
 using GameCycleLogic.GameCycleInterfaces;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ namespace ShootEmUp
     
         [SerializeField] 
         private PlayerInputManager m_inputManager;
+
+        [SerializeField] 
+        private GameCycle m_gameCycle;
 
         private MoveComponent m_moveComponent;
         private PlayerHitPointsComponent m_hitPointsComponent;
@@ -41,7 +45,7 @@ namespace ShootEmUp
 
         private void OnCharacterDeath()
         {
-            GameFinishHandler.FinishGame();
+            m_gameCycle.OnFinish();
         }
 
         void IFixedUpdatable.OnFixedUpdate(float fixedDeltaTime)

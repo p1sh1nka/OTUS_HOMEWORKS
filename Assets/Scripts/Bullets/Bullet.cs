@@ -7,7 +7,8 @@ namespace ShootEmUp
     public sealed class Bullet : 
         MonoBehaviour,
         IPausable,
-        IResumable
+        IResumable,
+        IFinishable
     {
         public event Action<Bullet, Collision2D> OnCollisionEntered;
 
@@ -51,7 +52,6 @@ namespace ShootEmUp
             this.m_spriteRenderer.color = color;
         }
 
-        [ContextMenu("Pause")]
         public void OnGamePause()
         {
             this.m_rigidbody2D.velocity = Vector2.zero;
@@ -60,6 +60,11 @@ namespace ShootEmUp
         public void OnGameResume()
         {
             this.m_rigidbody2D.velocity = m_activeVelocity;
+        }
+
+        public void OnGameFinish()
+        {
+            this.m_rigidbody2D.velocity = Vector2.zero;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace ShootEmUp
             this.m_currentTime = this.m_countdown;
         }
 
-        void IFixedUpdatable.OnFixedUpdate(float deltaTime)
+        void IFixedUpdatable.OnFixedUpdate(float fixedDeltaTime)
         {
             if (!this.m_moveAgent.IsReached)
             {
@@ -49,7 +49,7 @@ namespace ShootEmUp
                 }
             }
 
-            this.m_currentTime -= deltaTime;
+            this.m_currentTime -= fixedDeltaTime;
             
             if (this.m_currentTime <= 0)
             {
