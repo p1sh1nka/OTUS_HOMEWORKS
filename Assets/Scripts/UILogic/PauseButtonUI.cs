@@ -17,8 +17,6 @@ namespace UILogic
             {
                 m_button.onClick.AddListener(m_gameCycle.OnPause);
             }
-            
-           // m_gameCycle.AddListenersOfGameObject(this.gameObject);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace GameCycleLogic
         private List<IFixedUpdatable> m_gameFixedUpdateListeners = new List<IFixedUpdatable>();
 
         private GameState m_gameState = GameState.OFF;
-
         public void AddListener(IGameStateListener listener)
         {
             m_listeners.Add(listener as IGameStateListener);
@@ -65,13 +64,6 @@ namespace GameCycleLogic
             }
         }
 
-        /*private void Awake()
-        {
-            // some logic
-            
-            OnInit();
-        }*/
-
         public void OnInit()
         {
             foreach (var gameStateListener in m_listeners)
@@ -86,9 +78,6 @@ namespace GameCycleLogic
         }
         public void OnStart()
         {
-           /* if(m_gameState != GameState.INITIALIZED)
-                return;*/
-
             for (var index = 0; index < m_listeners.Count; index++)
             {
                 var gameStateListener = m_listeners[index];
