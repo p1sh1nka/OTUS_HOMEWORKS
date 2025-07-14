@@ -14,6 +14,7 @@ namespace ShootEmUp
         {
             m_prefab = prefab;
             m_container = container;
+            
             Initialize(initialCount);
         }
 

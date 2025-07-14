@@ -26,7 +26,7 @@ namespace ShootEmUp
         [SerializeField] 
         private LevelBounds m_levelBounds;
         
-        [FormerlySerializedAs("m_eventsHandler")] [SerializeField]
+        [SerializeField]
         private GameCycle m_gameCycle;
 
         private BulletPool m_bulletPool;
@@ -48,8 +48,9 @@ namespace ShootEmUp
 
         private void CheckOutOfBoundsBullets()
         {
-            foreach (var bullet in m_cache)
+            for (var index = 0; index < m_cache.Count; index++)
             {
+                var bullet = m_cache[index];
                 if (!m_levelBounds.InBounds(bullet.transform.position))
                 {
                     TryRemoveBullet(bullet);
