@@ -1,0 +1,4 @@
+﻿{
+  "name": "GameRepository",
+  "references":[ "GUID:20a65793b41e4876990a073cb6f1c3f8" ]
+}

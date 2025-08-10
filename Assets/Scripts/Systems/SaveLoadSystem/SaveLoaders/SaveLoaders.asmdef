@@ -1,0 +1,19 @@
+{
+    "name": "SaveLoaders",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4462eab9c32c4b9fbea32f2b50773a25",
+        "GUID:6f5499cf1ff94474882dbf0c07edf0c7",
+        "GUID:95b457c9106c465696f5825d5b44899d",
+        "GUID:3306076b5b994b48b19d4cfb485a9664"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
